@@ -3,6 +3,9 @@ from django.db import models
 from .models_events import (
     MessageEvent, ReactionEvent, EmojiUsage, XpTransaction
 )
+from .models_achievements import (
+    Achievement, UserAchievement, AchievementCategory
+)
 
 class DiscordProfile(models.Model):
     discord_id = models.BigIntegerField(unique=True, db_index=True)

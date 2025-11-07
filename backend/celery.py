@@ -16,6 +16,7 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 def setup_periodic_tasks(sender, **kwargs):
     # ✅ импортируем объект функции и вызываем напрямую — без строкового имени
     from kbrs_api.tasks.congratulations import send_birthday_congratulations
+    from kbrs_api.tasks.achievements import check_all_achievements, send_achievement_notifications
 
     # 1) однократно при старте воркера (как ты хотел сейчас)
     # send_birthday_congratulations.delay()
@@ -25,4 +26,18 @@ def setup_periodic_tasks(sender, **kwargs):
         crontab(hour=9, minute=0),  # 09:00 UTC
         send_birthday_congratulations.s(),
         name='daily-birthday-check',
+    )
+
+    # Achievement checks every 10 minutes
+    sender.add_periodic_task(
+        600.0,  # 10 minutes in seconds
+        check_all_achievements.s(),
+        name='check-achievements-10min',
+    )
+
+    # Achievement notifications every 2 minutes
+    sender.add_periodic_task(
+        120.0,  # 2 minutes in seconds
+        send_achievement_notifications.s(),
+        name='send-achievement-notifications',
     )

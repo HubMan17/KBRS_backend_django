@@ -3,6 +3,15 @@ from .views import RankView, TopView, AddXpView, SyncMembersView, BirthdayUpdate
 from .views_events import MessageEventBulk, ReactionEventBulk, EmojiUsageBulk, XpTransactionBulk
 from .views_stats import ServerHighlightsView, UserStatsView
 from .views_birthday import UpcomingBirthdaysView, SetBirthdayView
+from .views_achievements import (
+    AchievementListView,
+    AchievementDetailView,
+    UserAchievementsView,
+    UserAchievementStatsView,
+    CheckAchievementsView,
+    AchievementLeaderboardView,
+    AchievementCategoriesView,
+)
 from .views_f.discord_views import TokenExchangeView, NotifyAuthorizedView
 
 urlpatterns = [
@@ -23,7 +32,16 @@ urlpatterns = [
     
     path("birthdays/upcoming/", UpcomingBirthdaysView.as_view()),
     path("birthdays/set/",      SetBirthdayView.as_view()),
-    
+
+    # achievements
+    path("achievements/", AchievementListView.as_view(), name="achievement-list"),
+    path("achievements/<int:achievement_id>/", AchievementDetailView.as_view(), name="achievement-detail"),
+    path("achievements/user/", UserAchievementsView.as_view(), name="user-achievements"),
+    path("achievements/stats/", UserAchievementStatsView.as_view(), name="achievement-stats"),
+    path("achievements/check/", CheckAchievementsView.as_view(), name="achievement-check"),
+    path("achievements/leaderboard/", AchievementLeaderboardView.as_view(), name="achievement-leaderboard"),
+    path("achievements/categories/", AchievementCategoriesView.as_view(), name="achievement-categories"),
+
     path("discord/token", TokenExchangeView.as_view(), name="discord-token"),
     path("discord/notify", NotifyAuthorizedView.as_view(), name="discord-notify"),  # опционально
 ]

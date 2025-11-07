@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 # Health check endpoints
-from kbrs_api.views.health import health_check, readiness_check
+from kbrs_api.views_health import health_check, readiness_check
 
 urlpatterns = [
     # Admin

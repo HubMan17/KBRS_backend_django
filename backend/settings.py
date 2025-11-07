@@ -18,6 +18,10 @@ DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET")
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 DISCORD_API_BASE = os.getenv("DISCORD_API_BASE", "https://discord.com/api")
 
+# Discord Channels
+ACHIEVEMENT_CHANNEL_ID = os.getenv("ACHIEVEMENT_CHANNEL_ID", "0")
+BIRTHDAY_CHANNEL_ID = os.getenv("BIRTHDAY_CHANNEL_ID", "0")
+
 INSTALLED_APPS = [
     "rest_framework",
     "kbrs_api",
