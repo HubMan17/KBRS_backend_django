@@ -58,6 +58,41 @@ def _send_discord_embed(channel_id: int, embed_data: Dict[str, Any], token: str)
         raise
 
 
+def _send_achievement_message(channel_id: int, user_id: int, username: str, achievement_name: str, achievement_icon: str, xp_reward: int, token: str):
+    """Send simple text message about achievement unlock to Discord thread."""
+    if not channel_id:
+        print("[Achievement] No channel ID configured, skipping notification")
+        return
+
+    url = f"https://discord.com/api/v10/channels/{channel_id}/messages"
+    headers = {"Authorization": f"Bot {token}"}
+
+    # Create simple text message with mention
+    message = f"🎉 <@{user_id}> получил достижение **{achievement_icon} {achievement_name}** и заработал **{xp_reward} XP**!"
+
+    try:
+        resp = requests.post(
+            url,
+            json={"content": message},
+            headers=headers,
+            timeout=15
+        )
+
+        if resp.status_code >= 400:
+            try:
+                detail = resp.json()
+            except Exception:
+                detail = resp.text
+            print(f"[Achievement] Discord API error: status={resp.status_code}, detail={detail}")
+            resp.raise_for_status()
+
+        return resp.json()
+
+    except requests.RequestException as e:
+        print(f"[Achievement] Failed to send Discord notification: {e}")
+        raise
+
+
 @shared_task(bind=True, max_retries=3)
 def check_all_achievements(self, achievement_key: str = None):
     """
@@ -152,13 +187,14 @@ def send_achievement_notifications(self):
 
         for user_achievement in pending:
             try:
-                # Create embed data
-                embed_data = notifier.create_embed_data(user_achievement)
-
-                # Send to Discord
-                _send_discord_embed(
+                # Send simple text message to thread
+                _send_achievement_message(
                     ACHIEVEMENT_CHANNEL_ID,
-                    embed_data,
+                    user_achievement.profile.discord_id,
+                    user_achievement.profile.username,
+                    user_achievement.achievement.name,
+                    user_achievement.achievement.icon,
+                    user_achievement.achievement.xp_reward,
                     DISCORD_TOKEN
                 )
 
