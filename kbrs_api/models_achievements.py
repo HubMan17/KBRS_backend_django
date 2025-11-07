@@ -27,9 +27,11 @@ class Achievement(models.Model):
 
     RARITY_CHOICES = [
         ('common', 'Common'),
+        ('uncommon', 'Uncommon'),
         ('rare', 'Rare'),
         ('epic', 'Epic'),
         ('legendary', 'Legendary'),
+        ('mythic', 'Mythic'),
     ]
 
     CONDITION_TYPE_CHOICES = [
@@ -84,6 +86,16 @@ class Achievement(models.Model):
         default=0,
         validators=[MinValueValidator(0)],
         help_text="XP awarded when unlocked"
+    )
+
+    # Category
+    category = models.ForeignKey(
+        'AchievementCategory',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='achievements',
+        help_text="Achievement category"
     )
 
     # Metadata
@@ -211,8 +223,6 @@ class AchievementCategory(models.Model):
     description = models.TextField(blank=True)
     icon = models.CharField(max_length=50, default="📁")
     order = models.IntegerField(default=0)
-
-    achievements = models.ManyToManyField(Achievement, related_name='categories', blank=True)
 
     class Meta:
         ordering = ['order', 'name']
