@@ -26,6 +26,8 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+staticfiles
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -129,7 +131,11 @@ __pypackages__/
 
 # Celery stuff
 celerybeat-schedule
+celerybeat-schedule.db
+celerybeat-schedule-shm
+celerybeat-schedule-wal
 celerybeat.pid
+*.pid
 
 # SageMath parsed files
 *.sage.py
@@ -145,6 +151,7 @@ ENV/
 env.bak/
 venv.bak/
 
+.claude
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -206,3 +213,38 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ============================================================================
+# KBRS Backend Specific
+# ============================================================================
+
+# Django
+staticfiles/
+static_root/
+media_root/
+*.sqlite3
+*.db
+*.db-journal
+celerybeat-schedule*
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.env.local
+.env.prod
+.env.production
+.env.staging
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
